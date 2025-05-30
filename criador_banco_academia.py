@@ -1,7 +1,5 @@
 import sqlite3
 import pandas as pd
-import streamlit as st
-import csv
 
 conn = sqlite3.connect("banco_academia.db")
 cursor = conn.cursor()

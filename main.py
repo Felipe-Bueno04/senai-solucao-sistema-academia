@@ -3,6 +3,8 @@ import streamlit as st
 import pandas as pd
 import matplotlib as plt
 import seaborn as sns
+from cadastro_cliente import cadastrar_cliente
+from cadastro_pagamento import cadastar_pagamento
 
 st.title(":muscle: Sistema de Academia",)
 st.write("O sistema é capaz de controlar os dados de **Clientes**, **Instrutores**, **Planos**, **Treinos** e **Exercícios**")
@@ -21,11 +23,11 @@ opcoes_cadastro = st.radio("O que deseja cadastrar?", ["Cliente", "Pagamento", "
 
 if opcoes_cadastro == "Cliente":
     #TODO: Implementar Cadastro Cliente
-    st.write("Cadastro Cliente") # Excluir após implementação
+    cadastrar_cliente()
 
 elif opcoes_cadastro == "Pagamento":
     #TODO: Implementar Cadastro Pagamento
-    st.write("Cadastro Pagamento") # Excluir após implementação
+    cadastar_pagamento()
 
 elif opcoes_cadastro == "Treinos":
     #TODO: Implementar Cadastro Treinos
