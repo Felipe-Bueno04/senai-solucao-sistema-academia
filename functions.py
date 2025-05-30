@@ -96,7 +96,7 @@ def last_payment():
             CASE pg.pago
                 WHEN 1 THEN 'Pago'
                 ELSE 'Não pago'
-            END
+            END AS status
         FROM pagamentos pg
         JOIN clientes c ON pg.fk_cliente_id = c.id_cliente
         JOIN planos p ON pg.fk_plano_id = p.id_plano
