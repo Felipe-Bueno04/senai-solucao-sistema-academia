@@ -5,6 +5,8 @@ import matplotlib as plt
 import seaborn as sns
 from cadastro_cliente import cadastrar_cliente
 from cadastro_pagamento import cadastar_pagamento
+from cadastro_treino import cadastrar_treino
+from cadastro_exercicio import cadastrar_exercicio_no_treino
 
 st.title(":muscle: Sistema de Academia",)
 st.write("O sistema é capaz de controlar os dados de **Clientes**, **Instrutores**, **Planos**, **Treinos** e **Exercícios**")
@@ -31,8 +33,8 @@ elif opcoes_cadastro == "Pagamento":
 
 elif opcoes_cadastro == "Treinos":
     #TODO: Implementar Cadastro Treinos
-    st.write("Cadastro Treinos") # Excluir após implementação
+    cadastrar_treino()
 
 elif opcoes_cadastro == "Exercícios no Treino":
     #TODO: Implementar Cadastro Exercícios no Treino
-    st.write("Cadastro Exercícios") # Excluir após implementação
+    cadastrar_exercicio_no_treino()
