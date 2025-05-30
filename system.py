@@ -84,3 +84,14 @@ def last_payment():
 
 def instructor_clients():
     conn = sqlite3.connect('banco_academia.db', check_same_thread=False)
+
+    df = pd.read_sql_query(""" 
+        SELECT i.nome_instrutores AS instrutor, COUNT(DISTINCT t.fk_cliente_id) AS clientes
+        FROM treinos t
+        JOIN instrutores i ON t.fk_instrutor_id = i.id_instrutor
+        GROUP BY i.nome_instrutores
+     """, conn)
+    
+    conn.close()
+
+    return df
