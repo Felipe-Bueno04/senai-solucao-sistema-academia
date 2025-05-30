@@ -14,7 +14,7 @@ def cadastrar_cliente():
     with st.form("form_cadastrar_cliente"):
         nome_cliente = st.text_input("Nome Completo:", placeholder="Nome Sobrenome")
         email_cliente = st.text_input("E-mail:", placeholder="email@dominio.com")
-        telefone = st.text_input("Telefone:", placeholder="+00 (DDD) 9 1234-5678")
+        telefone_cliente = st.text_input("Telefone:", placeholder="+00 (DDD) 9 1234-5678")
         idade = st.number_input("Idade:", min_value=12, step=1)
 
         df_planos = pd.read_sql_query("SELECT id_plano, nome_planos FROM planos ORDER BY nome_planos", conn)
@@ -23,8 +23,12 @@ def cadastrar_cliente():
         enviar = st.form_submit_button("Cadastrar")
 
         if enviar:
-            if nome_cliente and email_cliente and telefone and idade and plano_escolhido:
-                cursor.execute("INSERT INTO clientes (nome, email, telefone, idade, fk_plano_id)")
+            if nome_cliente and email_cliente and telefone_cliente and idade and plano_escolhido:
+                id_plano_escolhido = int(pd.read_sql_query(f"SELECT id_plano FROM planos WHERE nome_planos = '{plano_escolhido}'", conn).iloc[0, 0])
+
+                cursor.execute("""INSERT INTO clientes (nome_clientes, email, telefone, idade, fk_plano_id)
+                               VALUES (?, ?, ?, ?, ?)""",
+                               (nome_cliente, email_cliente, telefone_cliente, idade, id_plano_escolhido))
                 conn.commit()
                 st.success(f"Cliente Cadastrado com sucesso! {nome_cliente.capitalize()} - Plano {plano_escolhido}.")
                 st.rerun()
