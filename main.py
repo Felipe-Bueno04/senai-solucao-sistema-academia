@@ -17,3 +17,20 @@ st.subheader(":teacher: Quantos Clientes um Instrutor atende: ", divider="grey")
 
 st.subheader(":heavy_plus_sign: Formulário de Cadastro:", divider="grey")
 
+opcoes_cadastro = st.radio("O que deseja cadastrar?", ["Cliente", "Pagamento", "Treinos", "Exercícios no Treino"])
+
+if opcoes_cadastro == "Cliente":
+    #TODO: Implementar Cadastro Cliente
+    st.write("Cadastro Cliente") # Excluir após implementação
+
+elif opcoes_cadastro == "Pagamento":
+    #TODO: Implementar Cadastro Pagamento
+    st.write("Cadastro Pagamento") # Excluir após implementação
+
+elif opcoes_cadastro == "Treinos":
+    #TODO: Implementar Cadastro Treinos
+    st.write("Cadastro Treinos") # Excluir após implementação
+
+elif opcoes_cadastro == "Exercícios no Treino":
+    #TODO: Implementar Cadastro Exercícios no Treino
+    st.write("Cadastro Exercícios") # Excluir após implementação
