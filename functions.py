@@ -1,6 +1,7 @@
 import pandas as pd
 import sqlite3
 from datetime import date, datetime
+import streamlit as st
 
 # Consultas para visualização
 
@@ -27,16 +28,32 @@ def whole_df(option):
 
     return df # Retorna tabelas do banco puras
 
+def clients():
+    conn = sqlite3.connect('banco_academia.db', check_same_thread=False)
+
+    df = pd.read_sql_query(""" 
+        SELECT  c.id_cliente, c.nome_clientes AS nome, p.nome_planos AS plano, p.preco_mensal AS mensalidade, p.duracao_meses
+        FROM clientes c
+        JOIN planos p ON c.fk_plano_id = p.id_plano
+        ORDER BY c.nome_clientes
+     """, conn)
+
+    conn.close()
+
+    st.dataframe(df)
+
 def filter_by_workout(workout):
     conn = sqlite3.connect('banco_academia.db', check_same_thread=False)
     
+    workout = int(workout)
+
     df = pd.read_sql_query(""" 
         SELECT
             te.fk_treino_id AS treino,
-            c.nome AS nome_cliente,
-            i.nome AS nome_instrutor,
-            p.nome AS plano,
-            e.nome AS exercicio,
+            c.nome_clientes AS nome_cliente,
+            i.nome_instrutores AS nome_instrutor,
+            p.nome_planos AS plano,
+            e.nome_exercicios AS exercicio,
             e.grupo_muscular AS tipo,
             te.series,
             te.repeticoes
@@ -51,7 +68,7 @@ def filter_by_workout(workout):
 
     conn.close()
 
-    return df # Retorna dataframe pronto para visualização dos treinos e informações relevantes
+    st.dataframe(df) # Retorna dataframe pronto para visualização dos treinos e informações relevantes
 
 def count_payments():
     conn = sqlite3.connect('banco_academia.db', check_same_thread=False)
@@ -65,22 +82,30 @@ def count_payments():
 
     conn.close()
 
-    return payments
+    st.write(f'Total de pagamentos: {payments}')
 
 def last_payment():
     conn = sqlite3.connect('banco_academia.db', check_same_thread=False)
 
     df = pd.read_sql_query(""" 
-        SELECT c.nome, p.nome, pg.valor, MAX(pg.data_pagamento) AS ultimo_pagamento
+        SELECT
+            c.id_cliente,
+            c.nome_clientes, 
+            p.nome_planos, 
+            pg.valor, MAX(pg.data_pagamento) AS ultimo_pagamento,
+            CASE pg.pago
+                WHEN 1 THEN 'Pago'
+                ELSE 'Não pago'
+            END
         FROM pagamentos pg
         JOIN clientes c ON pg.fk_cliente_id = c.id_cliente
         JOIN planos p ON pg.fk_plano_id = p.id_plano
-        GROUP BY c.nome, p.nome, pg.valor
+        GROUP BY c.nome_clientes, p.nome_planos, pg.valor
      """, conn)
     
     conn.close()
 
-    return df
+    st.dataframe(df)
 
 def instructor_clients():
     conn = sqlite3.connect('banco_academia.db', check_same_thread=False)
@@ -94,4 +119,4 @@ def instructor_clients():
     
     conn.close()
 
-    return df
+    st.dataframe(df)
