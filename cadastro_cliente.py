@@ -17,10 +17,8 @@ def cadastrar_cliente():
         telefone = st.text_input("Telefone:", placeholder="+00 (DDD) 9 1234-5678")
         idade = st.number_input("Idade:", min_value=12, step=1)
 
-        #TODO: Query para selecionar os nomes dos planos disponíveis
-        # df_planos = pd.read_sql_query("", conn)
-        #TODO: Selectbox para mostrar os planos disponíveis
-        # plano_escolhido = st.selectbox("")
+        df_planos = pd.read_sql_query("SELECT id_plano, nome_planos FROM planos ORDER BY nome_planos", conn)
+        plano_escolhido = st.selectbox("Plano", df_planos["nome_planos"], index=2)
 
         enviar = st.form_submit_button("Cadastrar")
 
