@@ -1,5 +1,7 @@
 import sqlite3
 import pandas as pd
+import streamlit as st
+import csv
 
 conn = sqlite3.connect("banco_academia.db")
 cursor = conn.cursor()
@@ -7,7 +9,7 @@ cursor = conn.cursor()
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS clientes (
     id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
+    nome_clientes TEXT NOT NULL,
     email TEXT NOT NULL,
     telefone TEXT NOT NULL,
     idade INTEGER NOT NULL,
@@ -19,7 +21,7 @@ CREATE TABLE IF NOT EXISTS clientes (
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS instrutores (
     id_instrutor INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
+    nome_instrutores TEXT NOT NULL,
     especialidade TEXT NOT NULL
 )
 ''')
@@ -27,7 +29,7 @@ CREATE TABLE IF NOT EXISTS instrutores (
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS planos (
     id_plano INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
+    nome_planos TEXT NOT NULL,
     preco_mensal INTEGER NOT NULL,
     duracao_meses INTEGER NOT NULL   
 )
@@ -36,7 +38,7 @@ CREATE TABLE IF NOT EXISTS planos (
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS exercicios (
     id_exercicio INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
+    nome_exercicios TEXT NOT NULL,
     grupo_muscular TEXT NOT NULL   
 )
 ''')
@@ -89,34 +91,34 @@ for _, linha in df_novo.iterrows():
     cursor.execute('SELECT COUNT(*) FROM clientes WHERE email = ?', (linha['email'],))
     if cursor.fetchone()[0] == 0:
         cursor.execute('''
-            INSERT INTO clientes (nome, email, telefone, idade, fk_plano_id) VALUES (?, ?, ?, ?, ?)
+            INSERT INTO clientes (nome_clientes, email, telefone, idade, fk_plano_id) VALUES (?, ?, ?, ?, ?)
         ''', (linha['nome'], linha['email'], linha['telefone'], linha['idade'], linha['plano_id']))
 
 #POPULAR INSTUTORES
 df = pd.read_csv("arquivos_csv/instrutores.csv")
 for _, linha in df.iterrows():
-    cursor.execute('SELECT COUNT(*) FROM instrutores WHERE nome = ?', (linha['nome'],))
+    cursor.execute('SELECT COUNT(*) FROM instrutores WHERE nome_instrutores = ?', (linha['nome'],))
     if cursor.fetchone()[0] == 0:    
         cursor.execute('''
-            INSERT INTO instrutores (nome, especialidade) VALUES (?, ?)
+            INSERT INTO instrutores (nome_instrutores, especialidade) VALUES (?, ?)
         ''', (linha['nome'], linha['especialidade']))
 
 #POPULAR PLANOS
 df = pd.read_csv("arquivos_csv/planos.csv")
 for _, linha in df.iterrows():
-    cursor.execute('SELECT COUNT(*) FROM planos WHERE nome = ?', (linha['nome'],))
+    cursor.execute('SELECT COUNT(*) FROM planos WHERE nome_planos = ?', (linha['nome'],))
     if cursor.fetchone()[0] == 0:    
         cursor.execute('''
-            INSERT INTO planos (nome, preco_mensal, duracao_meses) VALUES (?, ?, ?)
+            INSERT INTO planos (nome_planos, preco_mensal, duracao_meses) VALUES (?, ?, ?)
         ''', (linha['nome'], linha['preco_mensal'], linha['duracao_meses']))
 
 #POPULAR EXERCICIOS
 df = pd.read_csv("arquivos_csv/exercicios.csv")
 for _, linha in df.iterrows():
-    cursor.execute('SELECT COUNT(*) FROM exercicios WHERE nome = ?', (linha['nome'],))
+    cursor.execute('SELECT COUNT(*) FROM exercicios WHERE nome_exercicios = ?', (linha['nome'],))
     if cursor.fetchone()[0] == 0:    
         cursor.execute('''
-            INSERT INTO exercicios (nome, grupo_muscular) VALUES (?, ?)
+            INSERT INTO exercicios (nome_exercicios, grupo_muscular) VALUES (?, ?)
         ''', (linha['nome'], linha['grupo_muscular']))
 
 #POPULAR TREINOS
