@@ -1,7 +1,7 @@
 import streamlit as st
 import sqlite3
 import bcrypt
-from analise_dados.functions import whole_df, filter_by_workout, last_payment, count_payments, instructor_clients, clients
+from analise_dados.functions import whole_df, filter_by_workout, last_payment, count_payments, instructor_clients, clients, current_workout
 from formularios_cadastro.cadastro_cliente import cadastrar_cliente
 from formularios_cadastro.cadastro_pagamento import cadastar_pagamento
 from formularios_cadastro.cadastro_treino import cadastrar_treino
@@ -130,10 +130,11 @@ def main():
             st.subheader(":clipboard: Listar Clientes e Planos:", divider="grey")
             clients()
 
-            st.subheader(":ledger: Treinos e seus Exercícios:", divider="grey")
-            treinos = whole_df('treinos')
-            treino = st.selectbox('Selecione um treino:', treinos['id_treino'])
-            filter_by_workout(treino)
+            st.subheader(":ledger: Treinos recentes de clientes e seus Exercícios:", divider="grey")
+            treinos = current_workout()
+            cliente = st.selectbox('Selecione um cliente:', treinos['cliente'])
+            id_treino = treinos['id_treino_atual'].loc[treinos['cliente'] == cliente].iloc[0]
+            filter_by_workout(id_treino)
 
             st.subheader(":dollar: Total Pagamentos e Último Pagamento Cliente:", divider="grey")
             count_payments()

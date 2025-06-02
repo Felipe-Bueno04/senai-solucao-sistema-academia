@@ -41,6 +41,20 @@ def clients():
 
     st.dataframe(df)
 
+def current_workout():
+    conn = sqlite3.connect('banco_academia.db', check_same_thread=False)
+
+    df = pd.read_sql_query(""" 
+        SELECT c.nome_clientes AS cliente, MAX(t.id_treino) AS id_treino_atual
+        FROM treinos t
+        JOIN clientes c ON t.fk_cliente_id = c.id_cliente
+        GROUP BY c.nome_clientes
+     """, conn)
+    
+    conn.close()
+
+    return df
+
 def filter_by_workout(workout):
     conn = sqlite3.connect('banco_academia.db', check_same_thread=False)
     
