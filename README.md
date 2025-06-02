@@ -16,7 +16,7 @@ cd senai-solucao-sistema-academia
 
 ### **3️⃣ Execução**  
 
-Execute o arquivo main.py via streamlit:
+Execute o arquivo app.py via streamlit:
 ```bash
-streamlit run .\main.py
+streamlit run .\app.py
 ```
