@@ -1,13 +1,9 @@
-import sqlite3
 import streamlit as st
-import pandas as pd
-import matplotlib as plt
-import seaborn as sns
-from cadastro_cliente import cadastrar_cliente
-from cadastro_pagamento import cadastar_pagamento
-from cadastro_treino import cadastrar_treino
-from cadastro_exercicio import cadastrar_exercicio_no_treino
-from functions import whole_df, filter_by_workout, last_payment, count_payments, instructor_clients, clients
+from analise_dados.functions import whole_df, filter_by_workout, last_payment, count_payments, instructor_clients, clients
+from formularios_cadastro.cadastro_cliente import cadastrar_cliente
+from formularios_cadastro.cadastro_pagamento import cadastar_pagamento
+from formularios_cadastro.cadastro_treino import cadastrar_treino
+from formularios_cadastro.cadastro_exercicio import cadastrar_exercicio_no_treino
 
 st.title(":muscle: Sistema de Academia",)
 st.write("O sistema é capaz de controlar os dados de **Clientes**, **Instrutores**, **Planos**, **Treinos** e **Exercícios**")

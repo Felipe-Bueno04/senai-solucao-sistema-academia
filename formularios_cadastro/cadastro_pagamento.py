@@ -1,7 +1,6 @@
 import sqlite3
 import streamlit as st
 import pandas as pd
-from datetime import datetime
 
 def conectar_banco():
     conn = sqlite3.connect("banco_academia.db", check_same_thread=False)

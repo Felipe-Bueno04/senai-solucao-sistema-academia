@@ -1,6 +1,5 @@
 import pandas as pd
 import sqlite3
-from datetime import date, datetime
 import streamlit as st
 
 # Consultas para visualização
