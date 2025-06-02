@@ -32,17 +32,13 @@ st.subheader(":heavy_plus_sign: Formulário de Cadastro:", divider="grey")
 opcoes_cadastro = st.radio("O que deseja cadastrar?", ["Cliente", "Pagamento", "Treinos", "Exercícios no Treino"])
 
 if opcoes_cadastro == "Cliente":
-    #TODO: Implementar Cadastro Cliente
     cadastrar_cliente()
 
 elif opcoes_cadastro == "Pagamento":
-    #TODO: Implementar Cadastro Pagamento
     cadastar_pagamento()
 
 elif opcoes_cadastro == "Treinos":
-    #TODO: Implementar Cadastro Treinos
     cadastrar_treino()
 
 elif opcoes_cadastro == "Exercícios no Treino":
-    #TODO: Implementar Cadastro Exercícios no Treino
     cadastrar_exercicio_no_treino()
