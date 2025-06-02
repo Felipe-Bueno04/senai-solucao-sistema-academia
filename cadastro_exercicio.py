@@ -30,3 +30,4 @@ def cadastrar_exercicio_no_treino():
                 conn.commit()
                 st.success(f"Exercício adicionado com sucesso ao treino! {exercicio.capitalize()} - Treino {treino}.")
                 st.rerun()
+                conn.close()
