@@ -4,7 +4,7 @@ Solução para o trabalho de sistemas de academia fornecido pelo curso do Senai.
 ### **1️⃣ Pré-requisitos**  
 Antes de começar, certifique-se de ter instalado e configurado as tecnologias abaixo. Também é possível utilizar o **venv** configurado. Fica ao seu critério qual utilizar para rodar:
 - Python 3.13+
-- *Bibliotecas*: via `pip install pandas matplotlib seaborn streamlit bcrypt`
+- *Bibliotecas*: via `pip install pandas streamlit bcrypt`
 
 ### **2️⃣ Instalação**  
 
