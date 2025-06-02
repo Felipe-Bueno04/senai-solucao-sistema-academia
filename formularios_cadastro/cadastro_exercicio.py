@@ -11,8 +11,14 @@ def conectar_banco():
 def cadastrar_exercicio_no_treino():
     conn, cursor = conectar_banco()
 
-    df_treinos = pd.read_sql_query("SELECT * FROM treinos", conn)
-    treino = st.selectbox('Selecione o treino: ', df_treinos['id_treino'])
+    df_treinos = pd.read_sql_query(""" 
+        SELECT c.nome_clientes as cliente, MAX(t.id_treino) AS id_treino_atual
+        FROM treinos t
+        JOIN clientes c ON t.fk_cliente_id = c.id_cliente
+        GROUP BY c.nome_clientes
+     """, conn)
+    cliente = st.selectbox('Selecione o cliente: ', df_treinos['cliente'])
+    treino = int(df_treinos['id_treino_atual'].loc[df_treinos['cliente'] == cliente].iloc[0])
 
     treino_exercicios = pd.read_sql_query("SELECT fk_exercicio_id FROM treino_exercicios WHERE fk_treino_id = ?", conn, params=(treino,))
     exercicios_repetidos = list(treino_exercicios['fk_exercicio_id'])
