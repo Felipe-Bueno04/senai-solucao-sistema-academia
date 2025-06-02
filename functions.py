@@ -91,7 +91,8 @@ def last_payment():
         SELECT
             c.id_cliente,
             c.nome_clientes, 
-            p.nome_planos, 
+            p.nome_planos,
+            COUNT(*) AS total_pagamentos,
             pg.valor, MAX(pg.data_pagamento) AS ultimo_pagamento,
             CASE pg.pago
                 WHEN 1 THEN 'Pago'
