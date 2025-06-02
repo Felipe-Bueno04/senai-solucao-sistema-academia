@@ -179,10 +179,6 @@ def main():
             st.session_state.auth = False
             st.session_state.page = 'login'
             st.rerun()
-        
-        elif st.session_state.selected_option.startswith(("1 -", "2 -", "3 -")):
-            st.subheader(st.session_state.selected_option)
-            st.write("Área para desenvolvimento das análises...")
 
         st.sidebar.markdown("---")
         st.sidebar.markdown(f"Usuário: `{st.session_state.current_user}`")
