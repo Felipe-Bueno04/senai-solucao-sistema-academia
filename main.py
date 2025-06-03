@@ -2,7 +2,7 @@ import streamlit as st
 import sqlite3
 import bcrypt
 import pandas as pd
-from analise_dados.functions import whole_df, filter_by_workout, last_payment, count_payments, instructor_clients, clients, current_workout
+from analise_dados.functions import whole_df, filter_by_workout, last_payment, count_payments, instructor_clients, clients, current_workout, last_payment_client, clients_filter
 from formularios_cadastro.cadastro_cliente import cadastrar_cliente
 from formularios_cadastro.cadastro_pagamento import cadastar_pagamento
 from formularios_cadastro.cadastro_treino import cadastrar_treino
@@ -111,7 +111,7 @@ def main():
         st.title("📝 Registrar Nova Conta")
         
         with st.form("register_form"):
-            new_user = st.text_input("Novo Usuário")
+            new_user = st.text_input("Novo Usuário",placeholder='Nome Completo')
             new_pass = st.text_input("Nova Senha", type="password")
             confirm_pass = st.text_input("Confirmar Senha", type="password")
             email = st.text_input("Email (opcional)")
@@ -160,7 +160,7 @@ def main():
         )
 
         # O que estiver selecionado nas opções, no caso as colunas
-        if st.session_state.selected_option in ["📊 Análises", "📊 Visualizar Dados"]:
+        if st.session_state.selected_option == "📊 Análises":
             st.write("O sistema é capaz de controlar os dados de **Clientes**, **Instrutores**, **Planos**, **Treinos** e **Exercícios**")
 
             st.subheader(":clipboard: Listar Clientes e Planos:", divider="grey")
@@ -178,6 +178,23 @@ def main():
 
             st.subheader(":teacher: Quantos Clientes um Instrutor atende: ", divider="grey")
             instructor_clients()
+
+        elif st.session_state.selected_option == "📊 Visualizar Dados":
+            st.header(f"Bem-vindo {st.session_state.current_user}")
+
+            st.subheader(":clipboard: Informações Pessoais", divider="grey")
+            clients_filter(st.session_state.current_user)
+
+            st.subheader(":ledger: Treinos Recentes e seus Exercícios:", divider="grey")
+            treinos = current_workout()
+            if treinos['cliente'].loc[treinos['cliente'] == st.session_state.current_user].shape[0] != 0:
+                id_treino = treinos['id_treino_atual'].loc[treinos['cliente'] == st.session_state.current_user].iloc[0]
+                filter_by_workout(id_treino)
+            else:
+                st.write('Nenhum treino registrado')
+
+            st.subheader(":dollar: Informações de Pagamento:", divider="grey")
+            last_payment_client(st.session_state.current_user)
 
         elif st.session_state.selected_option == "💾 Cadastros":
             st.subheader(":heavy_plus_sign: Formulário de Cadastro:", divider="grey")
