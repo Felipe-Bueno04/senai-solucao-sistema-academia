@@ -7,6 +7,24 @@ from formularios_cadastro.cadastro_cliente import cadastrar_cliente
 from formularios_cadastro.cadastro_pagamento import cadastar_pagamento
 from formularios_cadastro.cadastro_treino import cadastrar_treino
 from formularios_cadastro.cadastro_exercicio import cadastrar_exercicio_no_treino
+from datetime import datetime
+
+def set_page_config():
+    st.set_page_config(
+        page_title="Sistema de Academia",
+        page_icon="🏋️",
+        layout="wide",
+        initial_sidebar_state="expanded"
+    )
+
+def load_css():
+    try:
+        with open("assets/style.css", "r", encoding='utf-8') as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+    except FileNotFoundError:
+        st.warning("Arquivo CSS não encontrado")
+    except Exception as e:
+        st.error(f"Erro ao carregar CSS: {str(e)}")
 
 def init_db():
     conn = sqlite3.connect("users.db")
@@ -20,8 +38,6 @@ def init_db():
     )""")
     conn.commit()
     conn.close()
-
-init_db()
 
 def register_user(username, password, email=None, tipo="Cliente"):
     conn = sqlite3.connect("users.db")
@@ -73,6 +89,10 @@ def list_users():
     return df_users
 
 def main():
+    set_page_config()
+    load_css()
+    init_db()
+
     if 'auth' not in st.session_state:
         st.session_state.update({
             'auth': False,
@@ -82,7 +102,9 @@ def main():
         })
         
     if not st.session_state.auth and st.session_state.page == 'login':
-        st.title("🔒 Área de Login")
+        st.image("assets/logo_academia.png", width=400)
+        st.markdown("<h1 style='text-align: center; margin-bottom: 2rem;'>🔒 Área de Login</h1>", 
+                   unsafe_allow_html=True)
         
         with st.form("login_form"):
             username = st.text_input("Usuário")
@@ -108,7 +130,7 @@ def main():
                     st.rerun()
 
     elif not st.session_state.auth and st.session_state.page == 'register':
-        st.title("📝 Registrar Nova Conta")
+        st.title("📝 Registrar Conta")
         
         with st.form("register_form"):
             new_user = st.text_input("Novo Usuário",placeholder='Nome Completo')
@@ -116,51 +138,98 @@ def main():
             confirm_pass = st.text_input("Confirmar Senha", type="password")
             email = st.text_input("Email (opcional)")
 
-            if st.form_submit_button("Criar Conta"):
-                if new_pass != confirm_pass:
-                    st.error("As senhas não coincidem!")
-                elif register_user(new_user, new_pass, email):
-                    st.success("Conta criada com sucesso!")
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.form_submit_button("Criar Conta"):
+                    if new_pass != confirm_pass:
+                        st.error("As senhas não coincidem!")
+                    elif register_user(new_user, new_pass, email):
+                        st.success("Conta criada com sucesso!")
+                        st.session_state.page = 'login'
+                        st.rerun()
+                    else:
+                        st.error("Usuário já existe")                 
+            with col2:
+                if st.form_submit_button("Voltar"):
                     st.session_state.page = 'login'
                     st.rerun()
-                else:
-                    st.error("Usuário já existe")
-            
-            if st.form_submit_button("Voltar"):
-                st.session_state.page = 'login'
-                st.rerun()
 
     elif st.session_state.auth:
         if st.session_state.user_type == "Admin":
             menu_options = [
+                "🏠 Início",
                 "📊 Análises",
+                "📊 Visualizar Dados",
                 "💾 Cadastros",
                 "👨‍💼 Adicionar Funcionário",
-                "🔐 Alterar Senha",
-                "🚪 Sair"
+                "🔐 Alterar Senha"
             ]
         elif st.session_state.user_type == "Funcionário": # O que vai aparecer para o Funcionário/Admin
             menu_options = [
+                "🏠 Início",
                 "📊 Análises",
                 "💾 Cadastros",
-                "🔐 Alterar Senha",
-                "🚪 Sair"
+                "🔐 Alterar Senha"
             ]
         elif st.session_state.user_type == "Cliente": # O que vai aparecer para o Cliente
             menu_options = [
+                "🏠 Início",
                 "📊 Visualizar Dados",
-                "🔐 Alterar Senha",
-                "🚪 Sair"
+                "🔐 Alterar Senha"
             ]
-        
-        st.session_state.selected_option = st.sidebar.selectbox(
-            "Menu de Opções",
-            options=menu_options,
-            index=0
-        )
+
+        with st.sidebar:
+            st.image("assets/logo_academia.png", width=200)
+            st.title("Menu Principal")
+
+            st.session_state.selected_option = st.sidebar.selectbox(
+                "Menu de Opções",
+                options=menu_options,
+                index=0
+            )   
+            
+            st.markdown("---")
+            st.markdown(f"👤 Usuário: **{st.session_state.current_user}**")
+            if st.button("🚪 Sair"):
+                st.session_state.auth = False
+                st.session_state.page = 'login'
+                st.rerun()
 
         # O que estiver selecionado nas opções, no caso as colunas
-        if st.session_state.selected_option == "📊 Análises":
+        if st.session_state.selected_option == "🏠 Início":
+            st.title(f"Bem-vindo, {st.session_state.current_user}!")
+            
+            conn_academia = sqlite3.connect("banco_academia.db", check_same_thread=False)
+
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                qntd_clientes_ativos = int(pd.read_sql_query("SELECT COUNT(*) FROM clientes", conn_academia).iloc[0, 0])
+                st.metric("Clientes Ativos", qntd_clientes_ativos)
+            with col2:
+                pagamentos_recebidos = int(pd.read_sql_query("SELECT SUM(valor) FROM pagamentos", conn_academia).iloc[0, 0])
+                st.metric("Pagamentos Recebidos", f"R$ {pagamentos_recebidos:.2f}")
+            with col3:
+                treinos_ativos = int(pd.read_sql_query("SELECT COUNT(*) FROM treinos", conn_academia).iloc[0, 0])
+                st.metric("Treinos Ativos", treinos_ativos)
+            
+            st.markdown("---")
+            
+            tab1, tab2 = st.tabs(["📅 Agenda Hoje", "🔔 Notificações"])
+            with tab1:
+                data_hoje = datetime.now().strftime("%Y-%m-%d")
+                df_treinos_hoje = pd.read_sql_query(f"""SELECT c.nome_clientes as 'Clientes', i.nome_instrutores AS 'Instrutores' FROM treinos t
+                                                        JOIN clientes c ON c.id_cliente = t.fk_cliente_id
+                                                        JOIN instrutores i ON i.id_instrutor = t.fk_instrutor_id
+                                                        WHERE '{data_hoje}' BETWEEN data_inicio AND data_fim""", conn_academia)
+                qtnd_treinos_hoje = int(df_treinos_hoje.count().iloc[0])
+                st.write(f"Lista de agendamentos para hoje: {qtnd_treinos_hoje}")
+                st.dataframe(df_treinos_hoje)
+                
+            with tab2:
+                st.write("Últimas notificações do sistema...")
+        
+        elif st.session_state.selected_option == "📊 Análises":
+            st.title("📊 Análise dos Dados")
             st.write("O sistema é capaz de controlar os dados de **Clientes**, **Instrutores**, **Planos**, **Treinos** e **Exercícios**")
 
             st.subheader(":clipboard: Listar Clientes e Planos:", divider="grey")
@@ -180,7 +249,7 @@ def main():
             instructor_clients()
 
         elif st.session_state.selected_option == "📊 Visualizar Dados":
-            st.header(f"Bem-vindo {st.session_state.current_user}")
+            st.header(f"😁 Bem-vindo, {st.session_state.current_user}!")
 
             st.subheader(":clipboard: Informações Pessoais", divider="grey")
             clients_filter(st.session_state.current_user)
@@ -197,7 +266,7 @@ def main():
             last_payment_client(st.session_state.current_user)
 
         elif st.session_state.selected_option == "💾 Cadastros":
-            st.subheader(":heavy_plus_sign: Formulário de Cadastro:", divider="grey")
+            st.title(":heavy_plus_sign: Formulário de Cadastro:")
 
             opcoes_cadastro = st.radio("O que deseja cadastrar?", ["Cliente", "Pagamento", "Treinos", "Exercícios no Treino"])
 
@@ -214,7 +283,8 @@ def main():
                 cadastrar_exercicio_no_treino()
 
         elif st.session_state.selected_option == "🔐 Alterar Senha":
-            st.subheader("Alteração de Senha")
+            st.title("🔐 Alterar Senha")
+
             with st.form("change_pass_form"):
                 current_pass = st.text_input("Senha Atual", type="password")
                 new_pass = st.text_input("Nova Senha", type="password")
@@ -230,7 +300,8 @@ def main():
                         st.success("Senha alterada com sucesso!")
         
         elif st.session_state.selected_option == "👨‍💼 Adicionar Funcionário":
-            st.subheader("Alteração de Cargo")
+            st.title("👨‍💼Alteração de Cargo")
+
             with st.form("change_role_form"):
                 df_users = list_users()
                 usuario = st.selectbox('Selecione o usuário', df_users['username'])
@@ -244,9 +315,6 @@ def main():
             st.session_state.auth = False
             st.session_state.page = 'login'
             st.rerun()
-
-        st.sidebar.markdown("---")
-        st.sidebar.markdown(f"Usuário: `{st.session_state.current_user}`")
 
     if not st.session_state.auth:
         st.stop()

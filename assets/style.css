@@ -1,0 +1,204 @@
+/* Estilos gerais */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Cabeçalhos */
+h1, h2, h3, h4, h5, h6 {
+    color: #2c3e50;
+}
+
+/* Botões */
+.stButton>button {
+    border-radius: 8px;
+    transition: all 0.3s;
+    border: 1px solid #3498db;
+    background-color: #3498db;
+    color: white;
+    padding: 0.5rem 1rem;
+}
+
+.stButton>button:hover {
+    transform: scale(1.02);
+    background-color: #2980b9;
+}
+
+/* Inputs */
+.stTextInput>div>div>input, 
+.stSelectbox>div>div>select,
+.stDateInput>div>div>input {
+    border-radius: 6px;
+    border: 1px solid #bdc3c7;
+    padding: 0.5rem;
+}
+
+/* Cards */
+.css-1fv8s86 {
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+}
+
+/* Abas */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 10px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    padding: 0.5rem 1rem;
+    border-radius: 8px 8px 0 0;
+}
+
+/* Sidebar */
+.css-1vq4p4l {
+    padding: 2rem 1.5rem;
+    background-color: #2c3e50;
+    color: white;
+}
+
+/* Tabelas */
+.stDataFrame {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Barra Lateral */
+.stSidebar {
+    background-color: #2c3e50;
+    color: white;
+    padding: 1.5rem;
+}
+
+.stSidebar .sidebar-content {
+    background-color: transparent;
+}
+
+/* Logo na Sidebar */
+.stSidebar img {
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+/* Centralização da imagem usando os marcadores específicos */
+.st-emotion-cache-8atqhb.e1q5ojhd0 {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+/* Estilo para a imagem dentro do container */
+.st-emotion-cache-8atqhb.e1q5ojhd0 img {
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    object-fit: contain !important;
+    margin: 0 auto !important;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .st-emotion-cache-8atqhb.e1q5ojhd0 img {
+        max-width: 90% !important;
+    }
+}
+
+/* Container principal do formulário */
+.st-emotion-cache-4uzi61.e1ttwmlf1 {
+    max-width: 450px !important;  /* Largura reduzida */
+    margin: 0 auto !important;    /* Centralização */
+    padding: 2rem !important;
+    border-radius: 12px !important;
+    background-color: var(--surface) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+    border: 1px solid var(--border) !important;
+}
+
+/* Campos do formulário */
+.st-emotion-cache-4uzi61.e1ttwmlf1 .stTextInput input,
+.st-emotion-cache-4uzi61.e1ttwmlf1 .stTextInput textarea {
+    width: 100% !important;
+    padding: 0.75rem !important;
+    border-radius: 8px !important;
+    background-color: var(--card) !important;
+    border: 1px solid var(--border) !important;
+}
+
+/* Botões do formulário */
+.st-emotion-cache-4uzi61.e1ttwmlf1 .stButton button {
+    width: 100% !important;
+    padding: 0.75rem !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Ajuste das colunas */
+.st-emotion-cache-4uzi61.e1ttwmlf1 .stColumns {
+    gap: 1rem !important;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .st-emotion-cache-4uzi61.e1ttwmlf1 {
+        max-width: 90% !important;
+        padding: 1.5rem !important;
+    }
+}
+
+/* Centralização do botão Registrar Conta */
+.st-emotion-cache-rvq1fx.erovr382 {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+}
+
+/* Estilo específico para o botão */
+.st-emotion-cache-rvq1fx.erovr382 button {
+    width: 100% !important;
+    max-width: 200px !important;  /* Largura máxima do botão */
+    margin: 0 auto !important;
+    padding: 0.75rem !important;
+    border-radius: 8px !important;
+    background-color: #3a86ff !important;
+    color: white !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Efeito hover */
+.st-emotion-cache-rvq1fx.erovr382 button:hover {
+    background-color: #2667cc !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+}
+
+/* Centralização completa do componente */
+.st-emotion-cache-1s2v671.e1gk92lc0.st-b3.st-hc.st-hd.st-he.st-fo.st-dx.st-hf.st-hg {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: fit-content !important;
+    padding: 1rem 0 !important;
+}
+
+/* Estilo para elementos internos (opcional) */
+.st-emotion-cache-1s2v671.e1gk92lc0.st-b3.st-hc.st-hd.st-he.st-fo.st-dx.st-hf.st-hg > * {
+    margin: 0 auto !important;
+    text-align: center !important;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .st-emotion-cache-1s2v671.e1gk92lc0.st-b3.st-hc.st-hd.st-he.st-fo.st-dx.st-hf.st-hg {
+        flex-direction: column !important;
+        padding: 0.5rem !important;
+    }
+}
