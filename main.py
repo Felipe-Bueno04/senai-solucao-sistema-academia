@@ -1,6 +1,7 @@
 import streamlit as st
 import sqlite3
 import bcrypt
+import pandas as pd
 from analise_dados.functions import whole_df, filter_by_workout, last_payment, count_payments, instructor_clients, clients, current_workout
 from formularios_cadastro.cadastro_cliente import cadastrar_cliente
 from formularios_cadastro.cadastro_pagamento import cadastar_pagamento
@@ -56,6 +57,20 @@ def update_password(username, new_password):
     conn.commit()
     conn.close()
     return True
+
+def update_role(username, new_role):
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+    cursor.execute("UPDATE users SET tipo = ? WHERE username = ?", (new_role, username))
+    conn.commit()
+    conn.close()
+    return True
+
+def list_users():
+    conn = sqlite3.connect("users.db")
+    df_users = pd.read_sql_query("SELECT * FROM users", conn)
+    conn.close()
+    return df_users
 
 def main():
     if 'auth' not in st.session_state:
@@ -193,9 +208,20 @@ def main():
                         st.error("As senhas não coincidem!")
                     elif not verify_login(st.session_state.current_user, current_pass):
                         st.error("Senha atual incorreta!")
-                else:
-                    update_password(st.session_state.current_user, new_pass)
-                    st.success("Senha alterada com sucesso!")
+                    else:
+                        update_password(st.session_state.current_user, new_pass)
+                        st.success("Senha alterada com sucesso!")
+        
+        elif st.session_state.selected_option == "👨‍💼 Adicionar Funcionário":
+            st.subheader("Alteração de Cargo")
+            with st.form("change_role_form"):
+                df_users = list_users()
+                usuario = st.selectbox('Selecione o usuário', df_users['username'])
+                new_role = st.selectbox("Nova Cargo", ('Admin', 'Funcionário', 'Cliente'))
+            
+                if st.form_submit_button("Confirmar"):
+                    update_role(usuario, new_role)
+                    st.success("Cargo alterado com sucesso!")
 
         elif st.session_state.selected_option == "🚪 Sair":
             st.session_state.auth = False
