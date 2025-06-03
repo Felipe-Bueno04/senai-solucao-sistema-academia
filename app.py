@@ -54,6 +54,10 @@ def update_password(username, new_password):
     return True
 
 def main():
+    
+    with open("css/login.css") as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+    st.image("img/logo_FFLR.png", width=700)
     # Estado da sessão
     if 'auth' not in st.session_state:
         st.session_state.update({
@@ -64,9 +68,10 @@ def main():
         })
 
     if not st.session_state.auth and st.session_state.page == 'login':
+            
         st.title("🔒 Área de Login")
         
-        with st.form("login_form"):
+        with st.form("login_form"):    
             username = st.text_input("Usuário")
             password = st.text_input("Senha", type="password")
             
