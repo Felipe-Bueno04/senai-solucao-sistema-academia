@@ -41,6 +41,20 @@ def clients():
 
     st.dataframe(df)
 
+def clients_filter(cliente):
+    conn = sqlite3.connect('banco_academia.db', check_same_thread=False)
+
+    df = pd.read_sql_query(""" 
+        SELECT  c.id_cliente, c.nome_clientes AS nome, p.nome_planos AS plano, p.preco_mensal AS mensalidade, p.duracao_meses
+        FROM clientes c
+        JOIN planos p ON c.fk_plano_id = p.id_plano
+        WHERE c.nome_clientes = ?
+     """, conn, params=(cliente,))
+
+    conn.close()
+
+    st.dataframe(df)
+
 def current_workout():
     conn = sqlite3.connect('banco_academia.db', check_same_thread=False)
 
@@ -116,6 +130,31 @@ def last_payment():
         JOIN planos p ON pg.fk_plano_id = p.id_plano
         GROUP BY c.nome_clientes, p.nome_planos, pg.valor
      """, conn)
+    
+    conn.close()
+
+    st.dataframe(df)
+
+def last_payment_client(cliente):
+    conn = sqlite3.connect('banco_academia.db', check_same_thread=False)
+
+    df = pd.read_sql_query(""" 
+        SELECT
+            c.id_cliente,
+            c.nome_clientes, 
+            p.nome_planos,
+            COUNT(*) AS total_pagamentos,
+            pg.valor, MAX(pg.data_pagamento) AS ultimo_pagamento,
+            CASE pg.pago
+                WHEN 1 THEN 'Pago'
+                ELSE 'Não pago'
+            END AS status
+        FROM pagamentos pg
+        JOIN clientes c ON pg.fk_cliente_id = c.id_cliente
+        JOIN planos p ON pg.fk_plano_id = p.id_plano
+        WHERE c.nome_clientes = ?
+        GROUP BY c.nome_clientes, p.nome_planos, pg.valor
+     """, conn, params=(cliente,))
     
     conn.close()
 
