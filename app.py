@@ -114,6 +114,7 @@ def main():
         st.session_state.selected_option = st.sidebar.selectbox(
             "Menu de Opções",
             options=[
+                "🏠 Início",
                 "📊 Análises",
                 "💾 Cadastros",
                 "🔐 Alterar Senha",
@@ -122,9 +123,12 @@ def main():
             index=0
         )
 
-        st.title(f"Bem-vindo, {st.session_state.current_user}!")
-        
-        if st.session_state.selected_option == "📊 Análises":
+        if st.session_state.selected_option == "🏠 Início":
+            st.title(f"👋 Bem-vindo, {st.session_state.current_user}!")
+            st.write("Selecione as opções no menu ao lado para navegar no sistema!")
+
+        elif st.session_state.selected_option == "📊 Análises":
+            st.title("💻 Gerenciar Clientes")
             st.write("O sistema é capaz de controlar os dados de **Clientes**, **Instrutores**, **Planos**, **Treinos** e **Exercícios**")
 
             st.subheader(":clipboard: Listar Clientes e Planos:", divider="grey")
