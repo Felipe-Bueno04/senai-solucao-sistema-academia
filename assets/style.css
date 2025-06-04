@@ -108,6 +108,16 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
+.st-key-stContainer {
+    max-width: 450px !important;  /* Largura reduzida */
+    margin: 0 auto !important;    /* Centralização */
+    padding: 2rem !important;
+    border-radius: 12px !important;
+    background-color: var(--surface) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+    border: 1px solid var(--border) !important;
+}
+
 /* Container principal do formulário */
 .st-emotion-cache-4uzi61.e1ttwmlf1 {
     max-width: 450px !important;  /* Largura reduzida */

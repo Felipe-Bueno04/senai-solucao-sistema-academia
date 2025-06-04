@@ -18,16 +18,19 @@ def cadastrar_exercicio_no_treino():
         GROUP BY c.nome_clientes
      """, conn)
     
-    with st.form("form_cadastrar_exercicio_no_treino", clear_on_submit=True):
+    with st.container(key='stContainer'):
         cliente = st.selectbox('Selecione o cliente: ', df_treinos['cliente'])
         treino = int(df_treinos['id_treino_atual'].loc[df_treinos['cliente'] == cliente].iloc[0])
 
         treino_exercicios = pd.read_sql_query("SELECT fk_exercicio_id FROM treino_exercicios WHERE fk_treino_id = ?", conn, params=(treino,))
+
         exercicios_repetidos = list(treino_exercicios['fk_exercicio_id'])
         prm_list = ", ".join("?" for _ in exercicios_repetidos)
         sql_string = f"SELECT * FROM exercicios WHERE id_exercicio NOT IN({prm_list})"
         df_exercicios = pd.read_sql_query(sql_string, conn, params=(exercicios_repetidos))
-        if df_exercicios['id_exercicio'].shape[0] != 0:            
+
+        if df_exercicios['id_exercicio'].shape[0] != 0:     
+            with st.form("form_cadastrar_exercicio_no_treino", clear_on_submit=True):       
                 exercicio = st.selectbox('Selecione o exercício:', df_exercicios['nome_exercicios'])
                 id_exercicio = int(df_exercicios['id_exercicio'].loc[df_exercicios['nome_exercicios'] == exercicio].iloc[0])
 
