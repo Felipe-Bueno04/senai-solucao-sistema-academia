@@ -133,10 +133,10 @@ def main():
         st.title("📝 Registrar Conta")
         
         with st.form("register_form", clear_on_submit=True):
-            new_user = st.text_input("Novo Usuário",placeholder='Nome Completo')
-            new_pass = st.text_input("Nova Senha", type="password")
-            confirm_pass = st.text_input("Confirmar Senha", type="password")
-            email = st.text_input("Email (opcional)")
+            new_user = st.text_input("Novo Usuário",placeholder='Nome Completo').strip()
+            new_pass = st.text_input("Nova Senha", type="password").strip()
+            confirm_pass = st.text_input("Confirmar Senha", type="password").strip()
+            email = st.text_input("Email (opcional)").strip()
 
             col1, col2 = st.columns(2)
             with col1:
