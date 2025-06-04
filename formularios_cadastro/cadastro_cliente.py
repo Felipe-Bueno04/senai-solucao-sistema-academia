@@ -11,7 +11,7 @@ def conectar_banco():
 def cadastrar_cliente():
     conn, cursor = conectar_banco()
 
-    with st.form("form_cadastrar_cliente"):
+    with st.form("form_cadastrar_cliente", clear_on_submit=True):
         nome_cliente = st.text_input("Nome Completo:", placeholder="Nome Sobrenome")
         email_cliente = st.text_input("E-mail:", placeholder="email@dominio.com")
         telefone_cliente = st.text_input("Telefone:", placeholder="+00 (DDD) 9 1234-5678")

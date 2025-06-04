@@ -106,7 +106,7 @@ def main():
         st.markdown("<h1 style='text-align: center; margin-bottom: 2rem;'>🔒 Área de Login</h1>", 
                    unsafe_allow_html=True)
         
-        with st.form("login_form"):
+        with st.form("login_form", clear_on_submit=True):
             username = st.text_input("Usuário")
             password = st.text_input("Senha", type="password")
             
@@ -132,7 +132,7 @@ def main():
     elif not st.session_state.auth and st.session_state.page == 'register':
         st.title("📝 Registrar Conta")
         
-        with st.form("register_form"):
+        with st.form("register_form", clear_on_submit=True):
             new_user = st.text_input("Novo Usuário",placeholder='Nome Completo')
             new_pass = st.text_input("Nova Senha", type="password")
             confirm_pass = st.text_input("Confirmar Senha", type="password")
@@ -196,8 +196,28 @@ def main():
                 st.rerun()
 
         # O que estiver selecionado nas opções, no caso as colunas
-        if st.session_state.selected_option == "🏠 Início":
-            st.title(f"Bem-vindo, {st.session_state.current_user}!")
+        if st.session_state.selected_option == "🏠 Início" and st.session_state.user_type == "Cliente":
+            st.title(f"👋 Bem-vindo, {st.session_state.current_user}!")
+            
+            conn_academia = sqlite3.connect("banco_academia.db", check_same_thread=False)
+            
+            tab1, tab2 = st.tabs(["📅 Agenda Hoje", "🔔 Notificações"])
+            with tab1:
+                data_hoje = datetime.now().strftime("%Y-%m-%d")
+                df_treinos_hoje = pd.read_sql_query(f"""SELECT c.nome_clientes as 'Clientes', i.nome_instrutores AS 'Instrutores' FROM treinos t
+                                                        JOIN clientes c ON c.id_cliente = t.fk_cliente_id
+                                                        JOIN instrutores i ON i.id_instrutor = t.fk_instrutor_id
+                                                        WHERE ('{data_hoje}' BETWEEN data_inicio AND data_fim)
+                                                        AND c.nome_clientes = '{st.session_state.current_user}'""", conn_academia)
+                qtnd_treinos_hoje = int(df_treinos_hoje.count().iloc[0])
+                st.write(f"Lista de agendamentos para hoje: {qtnd_treinos_hoje}")
+                st.dataframe(df_treinos_hoje)
+                
+            with tab2:
+                st.write("Últimas notificações do sistema...")
+        
+        elif st.session_state.selected_option == "🏠 Início" and st.session_state.user_type != "Cliente":
+            st.title(f"👋 Bem-vindo, {st.session_state.current_user}!")
             
             conn_academia = sqlite3.connect("banco_academia.db", check_same_thread=False)
 
@@ -228,6 +248,8 @@ def main():
             with tab2:
                 st.write("Últimas notificações do sistema...")
         
+        
+
         elif st.session_state.selected_option == "📊 Análises":
             st.title("📊 Análise dos Dados")
             st.write("O sistema é capaz de controlar os dados de **Clientes**, **Instrutores**, **Planos**, **Treinos** e **Exercícios**")
@@ -249,7 +271,7 @@ def main():
             instructor_clients()
 
         elif st.session_state.selected_option == "📊 Visualizar Dados":
-            st.header(f"😁 Bem-vindo, {st.session_state.current_user}!")
+            st.header(f"📊 Visualizar Dados do {st.session_state.current_user}")
 
             st.subheader(":clipboard: Informações Pessoais", divider="grey")
             clients_filter(st.session_state.current_user)
@@ -285,7 +307,7 @@ def main():
         elif st.session_state.selected_option == "🔐 Alterar Senha":
             st.title("🔐 Alterar Senha")
 
-            with st.form("change_pass_form"):
+            with st.form("change_pass_form", clear_on_submit=True):
                 current_pass = st.text_input("Senha Atual", type="password")
                 new_pass = st.text_input("Nova Senha", type="password")
                 confirm_pass = st.text_input("Confirmar Nova Senha", type="password")
@@ -302,7 +324,7 @@ def main():
         elif st.session_state.selected_option == "👨‍💼 Adicionar Funcionário":
             st.title("👨‍💼Alteração de Cargo")
 
-            with st.form("change_role_form"):
+            with st.form("change_role_form", clear_on_submit=True):
                 df_users = list_users()
                 usuario = st.selectbox('Selecione o usuário', df_users['username'])
                 new_role = st.selectbox("Nova Cargo", ('Admin', 'Funcionário', 'Cliente'))

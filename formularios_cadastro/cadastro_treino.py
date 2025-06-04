@@ -11,7 +11,7 @@ def conectar_banco():
 def cadastrar_treino():
     conn, cursor = conectar_banco()
     
-    with st.form("form_cadastrar_cliente"):
+    with st.form("form_cadastrar_cliente", clear_on_submit=True):
         df_clientes = pd.read_sql_query("SELECT nome_clientes FROM clientes ORDER BY nome_clientes", conn)
         nome_cliente = st.selectbox("Cliente", df_clientes['nome_clientes'])
         

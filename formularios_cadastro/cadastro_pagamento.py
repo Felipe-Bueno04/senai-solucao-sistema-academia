@@ -11,7 +11,7 @@ def conectar_banco():
 def cadastar_pagamento():
     conn, cursor = conectar_banco()
 
-    with st.form("form_cadastrar_pagamento"):
+    with st.form("form_cadastrar_pagamento", clear_on_submit=True):
         df_nomes_cliente = pd.read_sql_query("SELECT id_cliente, nome_clientes FROM clientes ORDER BY nome_clientes", conn)
         clientes_dict = dict(zip(df_nomes_cliente["nome_clientes"], df_nomes_cliente["id_cliente"]))
         

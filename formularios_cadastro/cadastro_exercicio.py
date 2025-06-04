@@ -18,7 +18,7 @@ def cadastrar_exercicio_no_treino():
         GROUP BY c.nome_clientes
      """, conn)
     
-    with st.form("form_cadastrar_exercicio_no_treino"):
+    with st.form("form_cadastrar_exercicio_no_treino", clear_on_submit=True):
         cliente = st.selectbox('Selecione o cliente: ', df_treinos['cliente'])
         treino = int(df_treinos['id_treino_atual'].loc[df_treinos['cliente'] == cliente].iloc[0])
 
