@@ -161,7 +161,7 @@ def main():
                 "📊 Análises",
                 "📊 Visualizar Dados",
                 "💾 Cadastros",
-                "👨‍💼 Adicionar Funcionário",
+                "👨‍💼 Alterar Cargo",
                 "🔐 Alterar Senha"
             ]
         elif st.session_state.user_type == "Funcionário": # O que vai aparecer para o Funcionário/Admin
