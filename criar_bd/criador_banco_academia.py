@@ -85,13 +85,18 @@ df = pd.read_csv("arquivos_csv/clientes_academia.csv")
 colunas_desejadas = ['nome', 'email', 'telefone', 'idade', 'plano_id']
 df_novo = df[colunas_desejadas]
 
+pattern = '|'.join(['Srta.', 'Sra.', 'Sr.', 'Dra.', 'Dr.'])
+
+df_novo['nome'] = df_novo['nome'].str.replace(pattern, '', regex=True)
+df_novo['nome'] = df_novo['nome'].str.replace('.', '',)
+df_novo['nome'] = df_novo['nome'].str.strip()
+
 for _, linha in df_novo.iterrows():
     cursor.execute('SELECT COUNT(*) FROM clientes WHERE email = ?', (linha['email'],))
     if cursor.fetchone()[0] == 0:
         cursor.execute('''
             INSERT INTO clientes (nome_clientes, email, telefone, idade, fk_plano_id) VALUES (?, ?, ?, ?, ?)
         ''', (linha['nome'], linha['email'], linha['telefone'], linha['idade'], linha['plano_id']))
-
 #POPULAR INSTUTORES
 df = pd.read_csv("arquivos_csv/instrutores.csv")
 for _, linha in df.iterrows():

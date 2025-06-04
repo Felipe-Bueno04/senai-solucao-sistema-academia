@@ -12,9 +12,9 @@ def cadastrar_cliente():
     conn, cursor = conectar_banco()
 
     with st.form("form_cadastrar_cliente", clear_on_submit=True):
-        nome_cliente = st.text_input("Nome Completo:", placeholder="Nome Sobrenome")
-        email_cliente = st.text_input("E-mail:", placeholder="email@dominio.com")
-        telefone_cliente = st.text_input("Telefone:", placeholder="+00 (DDD) 9 1234-5678")
+        nome_cliente = st.text_input("Nome Completo:", placeholder="Nome Sobrenome").strip()
+        email_cliente = st.text_input("E-mail:", placeholder="email@dominio.com").strip()
+        telefone_cliente = st.text_input("Telefone:", placeholder="+00 (DDD) 9 1234-5678").strip()
         idade = st.number_input("Idade:", min_value=12, step=1)
 
         df_planos = pd.read_sql_query("SELECT id_plano, nome_planos FROM planos ORDER BY nome_planos", conn)

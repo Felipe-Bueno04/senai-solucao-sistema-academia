@@ -16,17 +16,18 @@ def cadastar_pagamento():
         clientes_dict = dict(zip(df_nomes_cliente["nome_clientes"], df_nomes_cliente["id_cliente"]))
         
         cliente_escolhido = st.selectbox("Cliente", df_nomes_cliente["nome_clientes"])
-        id_cliente_escolhido = clientes_dict[cliente_escolhido]
+        id_cliente_escolhido = int(clientes_dict[cliente_escolhido])
 
-        df_plano_cliente = pd.read_sql_query(f"""SELECT p.id_plano, p.nome_planos
+        df_plano_cliente = pd.read_sql_query(f"""SELECT p.id_plano, p.nome_planos, p.preco_mensal
                                       FROM clientes c
                                       JOIN planos p ON p.id_plano = c.fk_plano_id
-                                      WHERE c.id_cliente = {id_cliente_escolhido}""", conn)
+                                      WHERE c.id_cliente = ?""", conn, params=(id_cliente_escolhido,))
         id_plano_cliente = int(df_plano_cliente.iloc[0, 0])
 
         data_pagamento = st.date_input("Data Pagamento").strftime("%Y-%m-%d")
         
-        valor_pagamento = st.number_input("Valor", min_value=80, step=10)
+        valor_pagamento = float(df_plano_cliente.iloc[0, 2])
+        st.write(f'Valor: R${valor_pagamento}')
 
         foi_pago = st.radio("Foi pago?", ["Sim", "Não"])
         booleano_foi_pago = int(foi_pago == "Sim")
