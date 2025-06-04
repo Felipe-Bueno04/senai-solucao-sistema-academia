@@ -321,7 +321,7 @@ def main():
                         update_password(st.session_state.current_user, new_pass)
                         st.success("Senha alterada com sucesso!")
         
-        elif st.session_state.selected_option == "👨‍💼 Adicionar Funcionário":
+        elif st.session_state.selected_option == "👨‍💼 Alterar Cargo":
             st.title("👨‍💼Alteração de Cargo")
 
             with st.form("change_role_form", clear_on_submit=True):
