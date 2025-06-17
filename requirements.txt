@@ -1,0 +1,5 @@
+streamlit==0.60.0
+sqlite3
+bcrypt
+pandas
+opencv-python-headless
